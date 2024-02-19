@@ -19,7 +19,7 @@ describe("/api/topics", () => {
       .then((response) => {
         const topics = response.body;
 
-        topics.forEach((topic) => {
+        topics.topics.forEach((topic) => {
           expect(topic).toMatchObject({
             slug: expect.any(String),
             description: expect.any(String),
@@ -46,7 +46,7 @@ describe("/api/topics", () => {
             .expect(200)
             .expect('Content-Type', 'application/json; charset=utf-8')
             .then((response) => {
-                console.log(apiEndpointsJSON)
+                
               expect(response.body).toEqual(expect.any(Object));
               expect(response.body).toEqual(apiEndpointsJSON)
             });

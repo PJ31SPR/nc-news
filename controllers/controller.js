@@ -3,8 +3,9 @@ const {selectAllTopics, selectAllEndpoints} = require('../models/model.js');
 function getAllTopics(req, res, next){
 
 selectAllTopics().then((topics)=> {
+    // console.log (topics, '<--- toopics controller')
  
-res.status(200).send(topics.rows)
+res.status(200).send({topics: topics})
 }).catch((err) => {
     next(err)
 });
