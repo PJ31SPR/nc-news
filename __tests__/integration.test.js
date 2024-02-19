@@ -4,6 +4,8 @@ const db = require("../db/connection.js");
 const seed = require("../db/seeds/seed.js");
 const testData = require("../db/data/test-data/index.js");
 
+const apiEndpointsJSON = require('../endpoints.json');
+
 beforeEach(() => seed(testData));
 afterAll(() => {
   db.end();
@@ -37,3 +39,16 @@ describe("/api/topics", () => {
   });
 });
 
+    describe('/api', () => {
+        test('should respond with an object describing all endpoints', () => {
+          return request(app)
+            .get('/api')
+            .expect(200)
+            .expect('Content-Type', 'application/json; charset=utf-8')
+            .then((response) => {
+                console.log(apiEndpointsJSON)
+              expect(response.body).toEqual(expect.any(Object));
+              expect(response.body).toEqual(apiEndpointsJSON)
+            });
+        });
+      });

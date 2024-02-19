@@ -1,4 +1,4 @@
-const selectAllTopics = require('../models/model.js');
+const {selectAllTopics, selectAllEndpoints} = require('../models/model.js');
 
 function getAllTopics(req, res, next){
 
@@ -10,4 +10,12 @@ res.status(200).send(topics.rows)
 });
 }
 
-module.exports = getAllTopics
+function getAllEndpoints(req, res, next){
+    selectAllEndpoints().then((response)=>{
+        res.set('Content-Type', 'application/json').status(200).send(response)
+    }).catch((err) => {
+        next(err)
+    });
+}
+
+module.exports = {getAllTopics, getAllEndpoints}
