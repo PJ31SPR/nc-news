@@ -44,11 +44,7 @@ describe("/api", () => {
       .get("/api")
       .expect(200)
       .then((response) => {
-        console.log(response.body, "<-- response body.api ");
         expect(response.body).toEqual(apiEndpointsJSON);
-        //    console.log(response, '<--- response')
-        //    console.log(response.body.api, '<-- resp.body.api')
-        //    expect(response.body.api).toEqual(apiEndpointsJSON)
       });
   });
 });
@@ -59,7 +55,7 @@ describe("/api/articles/:article_id", () => {
       .get("/api/articles/1")
       .expect(200)
       .then((response) => {
-        expect(response.body.article[0]).toMatchObject({
+        expect(response.body.article).toMatchObject({
           author: expect.any(String),
           title: expect.any(String),
           article_id: 1,
