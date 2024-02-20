@@ -12,7 +12,10 @@ function selectAllTopics() {
 }
 
 function selectAllEndpoints() {
-  return fs.readFile(`endpoints.json`, "utf8");
+  return fs.readFile(`endpoints.json`, "utf8").then((response) =>{
+    console.log(response, '<-- model')
+    return response
+  })
 }
 
 function selectArticle(id) {
@@ -26,4 +29,8 @@ function selectArticle(id) {
   })
 }
 
-module.exports = { selectAllTopics, selectAllEndpoints, selectArticle };
+function selectAllArticles(){
+    console.log('hello from model 4')
+}
+
+module.exports = { selectAllTopics, selectAllEndpoints, selectArticle, selectAllArticles};
