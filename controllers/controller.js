@@ -36,9 +36,13 @@ res.status(200).send({article : article})
   })
 }
 
-function getAllArticles(){
-console.log('hello from controller 4')
-selectAllArticles()
+function getAllArticles(req, res, next){
+selectAllArticles().then((response) => {
+    console.log(response, '<<<<<')
+res.status(200).send({articles: response})
+}).catch((err) =>{
+    next(err)
+})
 }
 
 module.exports = { getAllTopics, getAllEndpoints, getArticle, getAllArticles};
