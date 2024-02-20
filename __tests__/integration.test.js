@@ -59,7 +59,7 @@ describe("/api/articles/:article_id", () => {
       .get("/api/articles/1")
       .expect(200)
       .then((response) => {
-        expect(response.body.article[0]).toMatchObject({
+        expect(response.body.article).toMatchObject({
           author: expect.any(String),
           title: expect.any(String),
           article_id: 1,

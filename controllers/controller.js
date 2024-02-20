@@ -29,7 +29,7 @@ function getAllEndpoints(req, res, next) {
 function getArticle(req, res, next) {
 const id = req.params.article_id
   selectArticle(id).then((article) => {
-res.status(200).send({article : article})
+res.status(200).send({article})
   })
   .catch((err) =>{
     next(err);
@@ -38,7 +38,6 @@ res.status(200).send({article : article})
 
 function getAllArticles(req, res, next){
 selectAllArticles().then((response) => {
-    console.log(response, '<<<<<')
 res.status(200).send({articles: response})
 }).catch((err) =>{
     next(err)
