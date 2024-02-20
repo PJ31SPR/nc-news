@@ -44,11 +44,7 @@ describe("/api", () => {
       .get("/api")
       .expect(200)
       .then((response) => {
-        console.log(response.body, "<-- response body.api ");
         expect(response.body).toEqual(apiEndpointsJSON);
-        //    console.log(response, '<--- response')
-        //    console.log(response.body.api, '<-- resp.body.api')
-        //    expect(response.body.api).toEqual(apiEndpointsJSON)
       });
   });
 });

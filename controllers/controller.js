@@ -1,9 +1,10 @@
 const {
   selectAllTopics,
-  selectAllEndpoints,
   selectArticle,
   selectAllArticles
 } = require("../models/model.js");
+
+const apiEndpointsJSON = require("../endpoints.json");
 
 function getAllTopics(req, res, next) {
   selectAllTopics()
@@ -16,15 +17,12 @@ function getAllTopics(req, res, next) {
 }
 
 function getAllEndpoints(req, res, next) {
-  selectAllEndpoints().then((api) => {
-        console.log(api, '<-- resp in controller')
-        // res.status(200).send({api});
-        res.set('Content-Type', 'application/json').status(200).send(api);
-    })
+  res.status(200).send(apiEndpointsJSON)
     .catch((err) => {
       next(err);
     });
 }
+
 
 function getArticle(req, res, next) {
 const id = req.params.article_id
