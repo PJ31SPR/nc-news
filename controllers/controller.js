@@ -2,6 +2,7 @@ const {
   selectAllTopics,
   selectAllEndpoints,
   selectArticle,
+  selectAllArticles
 } = require("../models/model.js");
 
 function getAllTopics(req, res, next) {
@@ -15,9 +16,10 @@ function getAllTopics(req, res, next) {
 }
 
 function getAllEndpoints(req, res, next) {
-  selectAllEndpoints()
-    .then((response) => {
-      res.set("Content-Type", "application/json").status(200).send(response);
+  selectAllEndpoints().then((api) => {
+        console.log(api, '<-- resp in controller')
+        // res.status(200).send({api});
+        res.set('Content-Type', 'application/json').status(200).send(api);
     })
     .catch((err) => {
       next(err);
@@ -34,4 +36,9 @@ res.status(200).send({article : article})
   })
 }
 
-module.exports = { getAllTopics, getAllEndpoints, getArticle };
+function getAllArticles(){
+console.log('hello from controller 4')
+selectAllArticles()
+}
+
+module.exports = { getAllTopics, getAllEndpoints, getArticle, getAllArticles};

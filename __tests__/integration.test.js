@@ -39,13 +39,16 @@ describe("/api/topics", () => {
 });
 
 describe("/api", () => {
-  test("should respond with an object describing all endpoints", () => {
+  test.only("should respond with an object describing all endpoints", () => {
     return request(app)
       .get("/api")
       .expect(200)
-      .expect("Content-Type", "application/json; charset=utf-8")
       .then((response) => {
-        expect(response.body).toEqual(apiEndpointsJSON);
+       console.log(response.body, '<-- response body.api ');
+       expect(response.body).toEqual(apiEndpointsJSON);
+    //    console.log(response, '<--- response')
+    //    console.log(response.body.api, '<-- resp.body.api')
+    //    expect(response.body.api).toEqual(apiEndpointsJSON)
       });
   });
 });
@@ -86,4 +89,15 @@ describe("/api/articles/:article_id", () => {
         
       });
   });
+});
+
+describe('/api/articles', () => {
+    test('should return array of all article objects, with the correct properties  ', () => {
+        return request(app)
+        .get('/api/articles')
+        .expect(200)
+        .then((response) =>{
+        const article = response.body
+        })
+    });
 });

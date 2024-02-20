@@ -1,6 +1,6 @@
 const express = require('express');
 const app = express(); 
-const {getAllTopics, getAllEndpoints, getArticle} = require('../controllers/controller.js');
+const {getAllTopics, getAllEndpoints, getArticle, getAllArticles} = require('../controllers/controller.js');
 const { handleCustomError, handleInternalError, handleServerError, handleNotFound, handleBadRequest } = require('../controllers/errors.controllers.js');
 
 // app.use(express.json());
@@ -11,7 +11,7 @@ app.get('/api', getAllEndpoints);
 
 app.get('/api/articles/:article_id', getArticle);
 
-
+app.get('/api/articles', getAllArticles);
 
 
 
