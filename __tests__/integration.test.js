@@ -238,3 +238,25 @@ describe('POST /api/articles/:article_id/comments', () => {
   });
 });
   
+describe('PATCH /api/articles/:article_id', () => {
+  test('PATCH 200: successfully updates the article votes', () => {
+    const updatedVotes = {
+      inc_votes: 10
+    };
+
+    return request(app)
+      .patch('/api/articles/1')
+      .send(updatedVotes)
+      .expect(200)
+      .then((response) => {
+        expect(response.body.article).toHaveProperty('article_id', 1);
+        expect(response.body.article).toHaveProperty('title', 'Living in the shadow of a great man');
+        expect(response.body.article).toHaveProperty('topic', 'mitch');
+        expect(response.body.article).toHaveProperty('author', 'butter_bridge');
+        expect(response.body.article).toHaveProperty('body', 'I find this existence challenging');
+        expect(response.body.article).toHaveProperty('created_at');
+        expect(response.body.article).toHaveProperty('votes', 110); 
+        expect(response.body.article).toHaveProperty('article_img_url', 'https://images.pexels.com/photos/158651/news-newsletter-newspaper-information-158651.jpeg?w=700&h=700');
+      });
+  })
+});
