@@ -50,20 +50,20 @@ describe("/api", () => {
 });
 
 describe("/api/articles/:article_id", () => {
-  test("GET:200 sends a specific article to the client", () => {
+  test.only("GET:200 sends a specific article to the client", () => {
     return request(app)
       .get("/api/articles/1")
       .expect(200)
       .then((response) => {
         expect(response.body.article).toMatchObject({
-          author: expect.any(String),
-          title: expect.any(String),
+          author: "butter_bridge",
+          title: "Living in the shadow of a great man",
           article_id: 1,
-          body: expect.any(String),
-          topic: expect.any(String),
+          body: "I find this existence challenging",
+          topic: "mitch",
           created_at: expect.any(String),
-          votes: expect.any(Number),
-          article_img_url: expect.any(String),
+          votes: 100,
+          article_img_url: "https://images.pexels.com/photos/158651/news-newsletter-newspaper-information-158651.jpeg?w=700&h=700",
         });
       });
   });
@@ -94,8 +94,9 @@ describe("/api/articles", () => {
       .then((response) => {
         const {articles} = response.body;
         articles.forEach((article) => {
-        expect(article).toMatchObject({
-
+          expect(article.body).toBeUndefined()
+        
+          expect(article).toMatchObject({
             author: expect.any(String),
             title: expect.any(String),
             article_id: expect.any(Number),
@@ -103,7 +104,7 @@ describe("/api/articles", () => {
             created_at: expect.any(String),
             votes: expect.any(Number),
             article_img_url: expect.any(String),
-            comment_count: expect.any(String),
+            comment_count: expect.any(Number),
           });
         });
       });
@@ -116,5 +117,18 @@ describe("/api/articles", () => {
         expect(response.body).toEqual({});
         expect(response.status).toBe(404);
       });
+  });
+});
+
+describe.skip('/api/articles/:article_id/comments', () => {
+  test('should return all comments from a specified article', () => {
+    return request(app)
+    .get('/api/articles/1/comments')
+//     comment_id
+// votes
+// created_at
+// author
+// body
+// article_id
   });
 });

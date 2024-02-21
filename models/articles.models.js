@@ -28,6 +28,12 @@ exports.selectAllArticles = () => {
         return Promise.reject({ status: 404, msg: "Not Found" });
       }
 
-      return response.rows;
+      const articlesWithCommentCount = response.rows.map((article) => ({
+        ...article,
+        comment_count: parseInt(article.comment_count),
+      }));
+
+      return articlesWithCommentCount;
+
     });
 };
