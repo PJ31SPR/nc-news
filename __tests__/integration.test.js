@@ -139,9 +139,19 @@ describe('GET /api/articles/:article_id/comments', () => {
           body: expect.any(String),
           article_id: 1
       })
-  
     })
     })
+  });
+  test('GET 200: should return an empty array when article has no comments', () => {
+    return request(app)
+      .get('/api/articles/2/comments')
+      .expect(200)
+      .then((response) => { 
+        const commentsArr = response.body.comments;
+    
+        expect(response.body).toEqual({comments: []})
+        expect(commentsArr).toHaveLength(0);
+      });
   });
   test('GET 400: sends an appropriate status and error message when given an invalid id type', () => {
     return request(app)
@@ -151,16 +161,6 @@ describe('GET /api/articles/:article_id/comments', () => {
         expect(response.body.msg).toBe("Bad Request");
       });
   });
-  test('GET 404: Not Found when resource is not found', () => {
-    return request(app)
-      .get('/api/articles/99/comments') 
-      .expect(404)
-      .then((response) => {
-        expect(response.body.msg).toBe("Not Found")
-        expect(response.status).toBe(404)
-      })
-  });
-
 });
 
 describe('POST /api/articles/:article_id/comments', () => {

@@ -7,9 +7,6 @@ WHERE article_id = $1
 ORDER BY created_at DESC;`, 
 [id])
 .then((response) => {
-if(response.rows.length === 0){
-    return Promise.reject({status:404, msg: 'Not Found'})
-}
 return response.rows
 })
 }
