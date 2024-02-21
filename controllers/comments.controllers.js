@@ -15,7 +15,6 @@ exports.addComment = (req, res, next) => {
     commentsModel.insertComment(id, {username, body}).then((comment) =>{
     res.status(201).send({comment})
     }).catch((err) =>{
-        next(err)
+       next(err)
     })
-
 }

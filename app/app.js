@@ -4,8 +4,8 @@ const app = express();
 const {
   handleCustomError,
   handleServerError,
-  handleNotFound,
   handleBadRequest,
+  handleNotFound,
 } = require("../controllers/errors.controllers.js");
 const {
   articlesController,
@@ -25,8 +25,9 @@ app.get('/api/articles/:article_id/comments', commentsController.getComments);
 app.post('/api/articles/:article_id/comments', commentsController.addComment);
 
 
-app.use(handleCustomError);
 app.use(handleBadRequest);
+app.use(handleNotFound);
+app.use(handleCustomError);
 app.use(handleServerError);
 
 module.exports = app;
