@@ -121,7 +121,7 @@ describe("GET /api/articles", () => {
   });
 });
 
-describe('/api/articles/:article_id/comments', () => {
+describe('GET /api/articles/:article_id/comments', () => {
   test('should return all comments from a specified article', () => {
     return request(app)
     .get('/api/articles/1/comments')
@@ -153,7 +153,7 @@ describe('/api/articles/:article_id/comments', () => {
   });
   test('GET 404: Not Found when resource is not found', () => {
     return request(app)
-      .get('/api/articles/99999999/comments') 
+      .get('/api/articles/99/comments') 
       .expect(404)
       .then((response) => {
         expect(response.body.msg).toBe("Not Found")
@@ -161,4 +161,23 @@ describe('/api/articles/:article_id/comments', () => {
       })
   });
 
+});
+
+describe('POST /api/articles/:article_id/comments', () => {
+  test('POST 201: successfully inserts a new comment to the db, and returns article to client', () => {
+    const newComment = {
+      "username": "butter_bridge",
+      "body": "wow look, a new comment!"
+    }
+    
+    return request(app)
+    .post('/api/articles/1/comments')
+    .send(newComment)
+    .expect(201)
+    .then((response) => {
+
+    expect(response.body.comment.author).toBe("butter_bridge"),
+    expect(response.body.comment.body).toBe('wow look, a new comment!')
+    })
+  });
 });
