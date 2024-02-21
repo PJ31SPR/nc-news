@@ -50,7 +50,7 @@ describe("/api", () => {
 });
 
 describe("/api/articles/:article_id", () => {
-  test.only("GET:200 sends a specific article to the client", () => {
+  test("GET:200 sends a specific article to the client", () => {
     return request(app)
       .get("/api/articles/1")
       .expect(200)
@@ -120,15 +120,42 @@ describe("/api/articles", () => {
   });
 });
 
-describe.skip('/api/articles/:article_id/comments', () => {
+describe('/api/articles/:article_id/comments', () => {
   test('should return all comments from a specified article', () => {
     return request(app)
     .get('/api/articles/1/comments')
-//     comment_id
-// votes
-// created_at
-// author
-// body
-// article_id
+    .expect(200)
+    .then((response) => {
+    const commentsArr = response.body.comments
+   
+    commentsArr.forEach((comment) => {
+      expect(comment).toMatchObject({
+        comment_id: expect.any(Number),
+          votes: expect.any(Number),
+          created_at: expect.any(String),
+          author: expect.any(String),
+          body: expect.any(String),
+          article_id: 1
+      })
+    })
+    })
   });
+  test('GET 400: sends an appropriate status and error message when given an invalid id type', () => {
+    return request(app)
+      .get('/api/articles/invalid_article_id/comments')
+      .expect(400)
+      .then((response) => {
+        expect(response.body.msg).toBe("Bad Request");
+      });
+  });
+  test('GET 404: Not Found when resource is not found', () => {
+    return request(app)
+      .get('/api/articles/99999999/comments') 
+      .expect(404)
+      .then((response) => {
+        expect(response.body.msg).toBe("Not Found")
+        expect(response.status).toBe(404)
+      })
+  });
+
 });

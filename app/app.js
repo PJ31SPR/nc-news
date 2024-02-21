@@ -24,6 +24,8 @@ app.get("/api/articles/:article_id", articlesController.getArticle);
 
 app.get("/api/articles", articlesController.getAllArticles);
 
+app.get('/api/articles/:article_id/comments', commentsController.getComments)
+
 app.use(handleCustomError);
 
 app.use(handleBadRequest);
