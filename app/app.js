@@ -3,6 +3,7 @@ const app = express();
 
 const {
   handleCustomError,
+  handleNotNullConstraint,
   handleServerError,
   handleBadRequest,
   handleNotFound,
@@ -29,6 +30,7 @@ app.patch(('/api/articles/:article_id'), articlesController.updateArticle);
 
 app.use(handleBadRequest);
 app.use(handleNotFound);
+app.use(handleNotNullConstraint);
 app.use(handleCustomError);
 app.use(handleServerError);
 

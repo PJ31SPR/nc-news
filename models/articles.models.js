@@ -47,6 +47,9 @@ exports.modifyArticle = (id, inc_votes) =>{
     [inc_votes, id]
   )
   .then((response) => {
+    if (response.rows.length === 0){
+      return Promise.reject({status: 404, msg: 'Not Found'})
+    }
     return response.rows[0];
-  });
+  })
 };

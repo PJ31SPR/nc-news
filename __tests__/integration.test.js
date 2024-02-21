@@ -258,5 +258,61 @@ describe('PATCH /api/articles/:article_id', () => {
         expect(response.body.article).toHaveProperty('votes', 110); 
         expect(response.body.article).toHaveProperty('article_img_url', 'https://images.pexels.com/photos/158651/news-newsletter-newspaper-information-158651.jpeg?w=700&h=700');
       });
-  })
+  });
+  test('PATCH 400: sends an appropriate status and error message when given an invalid id type', () => {
+    const updatedVotes = {
+      inc_votes: 10
+    };
+
+    return request(app)
+      .patch('/api/articles/forklift')
+      .send(updatedVotes)
+      .expect(400)
+      .then((response) => {
+        expect(response.body.msg).toBe('Bad Request');
+        expect(response.status).toBe(400);
+  });
+})
+  test('PATCH 400: sends an appropriate status and error message when invalid request body format given', () => {
+    const updatedVotes = {
+      inc_votes: 'ten'
+    };
+
+    return request(app)
+      .patch('/api/articles/1')
+      .send(updatedVotes)
+      .expect(400)
+      .then((response) => {
+        expect(response.body.msg).toBe('Bad Request');
+        expect(response.status).toBe(400);
+      })
+  });
+  test('PATCH 404: sends an appropriate status and error message when non-existent article', () => {
+    const updatedVotes = {
+      inc_votes: 10
+    };
+
+    return request(app)
+      .patch('/api/articles/99')
+      .send(updatedVotes)
+      .expect(404)
+      .then((response) => {
+        expect(response.body.msg).toBe('Not Found');
+        expect(response.status).toBe(404);
+
+    })
+  });
+   test('PATCH 400: sends an appropriate status and error message when missing request body', () => {
+    const updatedVotes = null || undefined;
+    return request(app)
+      .patch('/api/articles/1')
+      .send(updatedVotes)
+      .expect(400)
+      .then((response) => {
+      expect(response.body.msg).toBe('Bad Request');
+      expect(response.status).toBe(400);
+      })
+  });
 });
+
+ 
