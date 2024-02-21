@@ -3,6 +3,7 @@ const app = require("../app/app.js");
 const db = require("../db/connection.js");
 const seed = require("../db/seeds/seed.js");
 const testData = require("../db/data/test-data/index.js");
+const jestSorted = require('jest-sorted');
 
 const apiEndpointsJSON = require("../endpoints.json");
 
@@ -11,7 +12,7 @@ afterAll(() => {
   db.end();
 });
 
-describe("/api/topics", () => {
+describe("GET/api/topics", () => {
   test("should successfully return all topics in an array of objects", () => {
     return request(app)
       .get("/api/topics")
@@ -38,7 +39,7 @@ describe("/api/topics", () => {
   });
 });
 
-describe("/api", () => {
+describe("GET /api", () => {
   test("should respond with an object describing all endpoints", () => {
     return request(app)
       .get("/api")
@@ -49,7 +50,7 @@ describe("/api", () => {
   });
 });
 
-describe("/api/articles/:article_id", () => {
+describe("GET /api/articles/:article_id", () => {
   test("GET:200 sends a specific article to the client", () => {
     return request(app)
       .get("/api/articles/1")
@@ -86,7 +87,7 @@ describe("/api/articles/:article_id", () => {
   });
 });
 
-describe("/api/articles", () => {
+describe("GET /api/articles", () => {
   test("should return array of all article objects, with the correct properties  ", () => {
     return request(app)
       .get("/api/articles")
@@ -125,9 +126,10 @@ describe('/api/articles/:article_id/comments', () => {
     return request(app)
     .get('/api/articles/1/comments')
     .expect(200)
-    .then((response) => {
-    const commentsArr = response.body.comments
-   
+    .then((response) => { 
+      const commentsArr = response.body.comments
+      expect(commentsArr).toBeSortedBy('created_at', { descending: true });
+
     commentsArr.forEach((comment) => {
       expect(comment).toMatchObject({
         comment_id: expect.any(Number),
@@ -137,6 +139,7 @@ describe('/api/articles/:article_id/comments', () => {
           body: expect.any(String),
           article_id: 1
       })
+  
     })
     })
   });
