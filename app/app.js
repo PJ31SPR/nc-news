@@ -3,6 +3,7 @@ const app = express();
 
 const {
   handleCustomError,
+  handleNotNullConstraint,
   handleServerError,
   handleBadRequest,
   handleNotFound,
@@ -24,9 +25,12 @@ app.get('/api/articles/:article_id/comments', commentsController.getComments);
 
 app.post('/api/articles/:article_id/comments', commentsController.addComment);
 
+app.patch(('/api/articles/:article_id'), articlesController.updateArticle);
+
 
 app.use(handleBadRequest);
 app.use(handleNotFound);
+app.use(handleNotNullConstraint);
 app.use(handleCustomError);
 app.use(handleServerError);
 
