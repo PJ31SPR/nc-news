@@ -89,7 +89,7 @@ describe("GET /api/articles/:article_id", () => {
 });
 
 describe("GET /api/articles", () => {
-  test("GET 200: should return array of all article objects, with the correct properties  ", () => {
+  test("GET 200: should return array of all article objects, with the correct properties, if no query specified", () => {
     return request(app)
       .get("/api/articles")
       .expect(200)
@@ -109,8 +109,25 @@ describe("GET /api/articles", () => {
             comment_count: expect.any(Number),
           });
         });
-      });
-  });
+      })
+    })
+    test('GET 200: should return array of articles filtered by topic', () => {
+      return request(app)
+      .get('/api/articles?topic=cats')
+      .expect(200)
+      .then((response) => {
+      expect(response.body.articles).toEqual([{
+        author: 'rogersop',
+        title: 'UNCOVERED: catspiracy to bring down democracy',
+        article_id: 5,
+        topic: 'cats',
+        created_at: '2020-08-03T13:14:00.000Z',
+        votes: 0,
+        article_img_url: 'https://images.pexels.com/photos/158651/news-newsletter-newspaper-information-158651.jpeg?w=700&h=700',
+        comment_count: 2
+      }])
+      })
+    });
   test("GET:404 Not Found when resource is not found", () => {
     return request(app)
       .get("/api/badPath")
@@ -120,6 +137,14 @@ describe("GET /api/articles", () => {
         expect(response.status).toBe(404);
       });
   });
+    test('GET 404: sends an appropriate status and error message when non-existent topic', () => {
+      return request(app)
+        .get('/api/articles?topic=nonexistent')
+        .expect(404)
+        .then((response) => {
+          expect(response.body.msg).toBe('Not Found');
+        });
+    });
 });
 
 describe("GET /api/articles/:article_id/comments", () => {
