@@ -137,6 +137,14 @@ describe("GET /api/articles", () => {
         expect(response.status).toBe(404);
       });
   });
+    test('GET 404: sends an appropriate status and error message when non-existent topic', () => {
+      return request(app)
+        .get('/api/articles?topic=nonexistent')
+        .expect(404)
+        .then((response) => {
+          expect(response.body.msg).toBe('Not Found');
+        });
+    });
 });
 
 describe("GET /api/articles/:article_id/comments", () => {
