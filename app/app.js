@@ -20,11 +20,7 @@ app.use(express.json());
 app.get("/api/topics", topicsController.getAllTopics);
 app.get("/api", topicsController.getAllEndpoints);
 app.get("/api/articles/:article_id", articlesController.getArticle);
-
-
-app.get("/api/articles", articlesController.getAllArticles); //<<<<<<<<<<<<<//
-
-
+app.get("/api/articles", articlesController.getAllArticles); 
 app.get('/api/articles/:article_id/comments', commentsController.getComments);
 app.get('/api/users', usersController.getAllUsers);
 
