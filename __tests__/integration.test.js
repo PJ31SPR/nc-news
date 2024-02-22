@@ -315,4 +315,14 @@ describe('PATCH /api/articles/:article_id', () => {
   });
 });
 
- 
+ describe('DELETE /api/comments/:comment_id', () => {
+  test('DELETE 204: should delete given comment and return correct status code', () => {
+    return request(app)
+    .delete('/api/comments/1')
+    .expect(204)
+    .then((response) =>{
+      expect(response.body).toEqual({})
+      expect(response.status).toBe(204)
+    })
+  });
+ });

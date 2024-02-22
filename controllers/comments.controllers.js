@@ -18,3 +18,12 @@ exports.addComment = (req, res, next) => {
        next(err)
     })
 }
+
+exports.removeComment = (req, res, next) => {
+    const id = req.params.comment_id
+    commentsModel.deleteComment(id).then(() => {
+    res.status(204).send({})
+    }).catch((err) => {
+        next(err)
+    })
+}
