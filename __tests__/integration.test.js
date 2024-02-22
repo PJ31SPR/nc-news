@@ -344,3 +344,23 @@ describe('PATCH /api/articles/:article_id', () => {
   });
 })
  });
+
+ describe('GET /api/users', () => {
+   test('GET 200: should return array of all users with correct properties ', () => {
+     return request(app)
+     .get('/api/users')
+     .expect(200)
+     .then((response) =>{
+       const usersArr = response.body.users
+       usersArr.forEach((user) =>{
+         expect(user).toMatchObject({
+           username: expect.any(String),
+           name: expect.any(String),
+           avatar_url: expect.any(String)
+         })
+       })
+     })
+});
+ })
+
+
