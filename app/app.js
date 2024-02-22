@@ -25,7 +25,9 @@ app.get('/api/articles/:article_id/comments', commentsController.getComments);
 
 app.post('/api/articles/:article_id/comments', commentsController.addComment);
 
-app.patch(('/api/articles/:article_id'), articlesController.updateArticle);
+app.patch('/api/articles/:article_id', articlesController.updateArticle);
+
+app.delete('/api/comments/:comment_id', commentsController.removeComment);
 
 
 app.use(handleBadRequest);
