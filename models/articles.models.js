@@ -14,29 +14,35 @@ exports.selectArticle = (id) => {
     });
 };
 
-exports.selectAllArticles = () => {
-  return db
-    .query(
-      `SELECT articles.author, articles.title, articles.article_id, articles.topic, articles.created_at, articles.votes, articles.article_img_url, COUNT(comments.comment_id) AS comment_count
+exports.selectAllArticles = (topic) => {
+  let queryStr = `SELECT articles.author, articles.title, articles.article_id, articles.topic, articles.created_at, articles.votes, articles.article_img_url, COUNT(comments.comment_id) AS comment_count
     FROM articles
-    LEFT JOIN comments ON articles.article_id = comments.article_id
-    GROUP BY articles.article_id
-    ORDER BY articles.created_at DESC;`
-    )
-    .then((response) => {
-      if (response.rows.length === 0) {
-        return Promise.reject({ status: 404, msg: "Not Found" });
-      }
+    LEFT JOIN comments ON articles.article_id = comments.article_id`
+    
+    const queryVals = [];
 
-      const articlesWithCommentCount = response.rows.map((article) => ({
-        ...article,
-        comment_count: parseInt(article.comment_count),
-      }));
+    if (topic) {
+      queryStr += ` WHERE articles.topic = $1`; 
+      queryVals.push(topic); 
+    }
 
-      return articlesWithCommentCount;
+    queryStr += ` GROUP BY articles.article_id ORDER BY articles.created_at DESC`;
 
-    });
-};
+return db.query(queryStr, queryVals).then((response) =>{
+  if (response.rows.length === 0) {
+    return Promise.reject({ status: 404, msg: "Not Found" });
+  }
+
+  const articlesWithCommentCount = response.rows.map((article) => ({
+    ...article,
+    comment_count: parseInt(article.comment_count),
+  }));
+
+  return articlesWithCommentCount;
+
+});
+}
+
 
 exports.modifyArticle = (id, inc_votes) =>{
   return db.query(

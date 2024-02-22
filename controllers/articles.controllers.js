@@ -13,12 +13,13 @@ exports.getArticle = (req, res, next) => {
 };
 
 exports.getAllArticles = (req, res, next) => {
-  articlesModel
-    .selectAllArticles()
+  const topic  = req.query.topic
+  articlesModel.selectAllArticles(topic)
     .then((response) => {
       res.status(200).send({ articles: response });
     })
     .catch((err) => {
+      console.log(err, '<<< err in controller')
       next(err);
     });
 };
