@@ -321,8 +321,26 @@ describe('PATCH /api/articles/:article_id', () => {
     .delete('/api/comments/1')
     .expect(204)
     .then((response) =>{
-      expect(response.body).toEqual({})
-      expect(response.status).toBe(204)
+      expect(response.body).toEqual({});
+      expect(response.status).toBe(204);
     })
   });
+  test('DELETE 400: sends an appropriate status and error message when :comment_id invalid type', () => {
+    return request(app)
+    .delete('/api/comments/forklift')
+    .expect(400)
+    .then((response) =>{
+      expect(response.body.msg).toBe('Bad Request');
+      expect(response.status).toBe(400);
+  });
+})
+  test('DELETE 404: sends an appropriate status and error message when :comment_id does not exist', () => {
+    return request(app)
+    .delete('/api/comments/99')
+    .expect(404)
+    .then((response) =>{
+      expect(response.status).toBe(404);
+      expect(response.body.msg).toBe('Not Found')
+  });
+})
  });
