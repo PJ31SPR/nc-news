@@ -129,7 +129,15 @@ describe("GET /api/articles", () => {
       }])
       })
     });
-  test("GET:404 Not Found when resource is not found", () => {
+    test('GET 200: should return an empty array when topic exists but has no articles', () => {
+      return request(app)
+        .get('/api/articles?topic=paper')
+        .expect(200)
+        .then((response) => {
+          expect(response.body.articles).toEqual([]);
+        });
+    });
+    test("GET:404 Not Found when resource is not found", () => {
     return request(app)
       .get("/api/badPath")
       .expect(404)
