@@ -9,11 +9,12 @@ const {
   handleNotFound,
 } = require("../controllers/errors.controllers.js");
 const {
-  articlesController,
+    articlesController,
   topicsController,
   commentsController,
   usersController,
 } = require("../controllers/index.js");
+
 
 app.use(express.json());
 

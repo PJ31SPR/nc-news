@@ -1,8 +1,8 @@
-const {commentsModel} = require('../models/index.js');
+const {selectComments, insertComment, deleteComment} = require('../models/comments.models.js');
 
 exports.getComments = (req, res, next) => {
     const id = req.params.article_id 
-    commentsModel.selectComments(id).then((comments) =>{
+    selectComments(id).then((comments) =>{
         res.status(200).send({comments})
     }).catch((err) => {
         next(err)
@@ -12,7 +12,7 @@ exports.getComments = (req, res, next) => {
 exports.addComment = (req, res, next) => {
     const id = req.params.article_id
     const {username, body} = req.body
-    commentsModel.insertComment(id, {username, body}).then((comment) =>{
+    insertComment(id, {username, body}).then((comment) =>{
     res.status(201).send({comment})
     }).catch((err) =>{
        next(err)
@@ -21,7 +21,7 @@ exports.addComment = (req, res, next) => {
 
 exports.removeComment = (req, res, next) => {
     const id = req.params.comment_id
-    commentsModel.deleteComment(id).then(() => {
+    deleteComment(id).then(() => {
     res.status(204).send({})
     }).catch((err) => {
         next(err)
