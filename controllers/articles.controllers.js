@@ -1,4 +1,4 @@
-const { selectArticle, selectAllArticles, modifyArticle } = require("../models/articles.models.js");
+const { selectArticle, selectAllArticles, modifyArticle, selectComments, insertComment} = require("../models/articles.models.js");
 
 exports.getArticle = (req, res, next) => {
   const id = req.params.article_id;
@@ -29,5 +29,24 @@ exports.updateArticle = (req, res, next) => {
     res.status(200).send({article})
   }).catch((err) => {
     next(err)
+  })
+}
+
+exports.getComments = (req, res, next) => {
+  const id = req.params.article_id 
+  selectComments(id).then((comments) =>{
+      res.status(200).send({comments})
+  }).catch((err) => {
+      next(err)
+  })
+}
+
+exports.addComment = (req, res, next) => {
+  const id = req.params.article_id
+  const {username, body} = req.body
+  insertComment(id, {username, body}).then((comment) =>{
+  res.status(201).send({comment})
+  }).catch((err) =>{
+     next(err)
   })
 }
