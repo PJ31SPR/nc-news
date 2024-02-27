@@ -1,6 +1,8 @@
 const express = require("express");
 const app = express();
 
+const apiRouter = require('../routers/api.router.js');
+
 const {
   handleCustomError,
   handleNotNullConstraint,
@@ -8,27 +10,10 @@ const {
   handleBadRequest,
   handleNotFound,
 } = require("../controllers/errors.controllers.js");
-const {
-  articlesController,
-  topicsController,
-  commentsController,
-  usersController,
-} = require("../controllers/index.js");
 
 app.use(express.json());
 
-app.get("/api/topics", topicsController.getAllTopics);
-app.get("/api", topicsController.getAllEndpoints);
-app.get("/api/articles/:article_id", articlesController.getArticle);
-app.get("/api/articles", articlesController.getAllArticles); 
-app.get('/api/articles/:article_id/comments', commentsController.getComments);
-app.get('/api/users', usersController.getAllUsers);
-
-app.post('/api/articles/:article_id/comments', commentsController.addComment);
-
-app.patch('/api/articles/:article_id', articlesController.updateArticle);
-
-app.delete('/api/comments/:comment_id', commentsController.removeComment);
+app.use('/api', apiRouter)
 
 
 app.use(handleBadRequest);
