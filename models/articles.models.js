@@ -16,37 +16,57 @@ exports.selectArticle = (id) => {
     });
 };
       
-exports.selectAllArticles = (topic) => {
+exports.selectAllArticles = (topic, sort_by = 'created_at', order_by = 'desc') => {
+
+  const validSortBys = ['created_at', 'title', 'author', 'votes', 'comment_count'];
+  const validOrders = ['asc', 'desc'];
+
+
+  if (!validSortBys.includes(sort_by)) {
+    return Promise.reject({ status: 400, msg: 'Invalid sort_by parameter' });
+  }
+
+  if (!validOrders.includes(order_by.toLowerCase())) {
+    return Promise.reject({ status: 400, msg: 'Invalid order parameter' });
+  }
+
+  let orderByStr = '';
+
+  if (sort_by) {
+    orderByStr = `ORDER BY articles.${sort_by} ${order_by}`;
+  } else {
+    orderByStr = `ORDER BY articles.created_at ${order_by}`;
+  }
 
   const topicCheckStr = `SELECT * FROM topics WHERE slug = $1`;
   const topicCheckValue = [topic];
 
   return db.query(topicCheckStr, topicCheckValue)
-    .then((topicResponse) => {
-      if (topic && topicResponse.rows.length === 0) {
-   
-        return Promise.reject({ status: 404, msg: "Not Found" });
-      }
+  .then((topicResponse) => {
+    if (topic && topicResponse.rows.length === 0) {
+      return Promise.reject({ status: 404, msg: 'Not Found' });
+    }
 
-      let queryStr = `SELECT articles.author, articles.title, articles.article_id, articles.topic, articles.created_at, articles.votes, articles.article_img_url, CAST(COUNT(comments.comment_id) AS INTEGER) AS comment_count
-        FROM articles
-        LEFT JOIN comments ON articles.article_id = comments.article_id`;
+    let queryStr = `SELECT articles.author, articles.title, articles.article_id, articles.topic, articles.created_at, articles.votes, articles.article_img_url, CAST(COUNT(comments.comment_id) AS INTEGER) AS comment_count
+      FROM articles
+      LEFT JOIN comments ON articles.article_id = comments.article_id`;
 
-      const queryVals = [];
+    const queryVals = [];
 
-      if (topic) {
-        queryStr += ` WHERE articles.topic = $1`;
-        queryVals.push(topic);
-      }
+    if (topic) {
+      queryStr += ` WHERE articles.topic = $1`;
+      queryVals.push(topic);
+    }
 
-      queryStr += ` GROUP BY articles.article_id ORDER BY articles.created_at DESC`;
+    queryStr += ` GROUP BY articles.article_id ${orderByStr}`;
 
-      return db.query(queryStr, queryVals)
-        .then((response) => {
-          return response.rows;
-        });
-    });
+    return db.query(queryStr, queryVals)
+      .then((response) => {
+        return response.rows;
+      });
+  });
 };
+  
 
 exports.modifyArticle = (id, inc_votes) =>{
   return db.query(
