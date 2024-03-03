@@ -564,5 +564,82 @@ describe('GET /api/users/:username', () => {
       })
     });
   });
+});
 
+describe('PATCH /api/comments/:comment_id', () => {
+  test('PATCH 200: should successfully update votes on specified comment', () => {
+    const updatedVotes = {
+      inc_votes: 10,
+    };
+
+    return request(app)
+      .patch("/api/comments/1")
+      .send(updatedVotes)
+      .expect(200)
+      .then((response) => {
+        expect(response.body.comment).toMatchObject({
+          comment_id: 1,
+          body: "Oh, I've got compassion running out of my nose, pal! I'm the Sultan of Sentiment!",
+          article_id: 9,
+          author: 'butter_bridge',
+          votes: 26,
+          created_at: '2020-04-06T12:17:00.000Z'
+        })
+  });
+});
+describe('PATCH /api/comments/:comment_id Error Handling', () => {
+  test("PATCH 400: sends an appropriate status and error message when given an invalid id type", () => {
+    const updatedVotes = {
+      inc_votes: 10,
+    };
+    
+    return request(app)
+    .patch("/api/comments/forklift")
+    .send(updatedVotes)
+    .expect(400)
+    .then((response) => {
+      expect(response.body.msg).toBe("Bad Request");
+      expect(response.status).toBe(400);
+    });
+  });
+  test("PATCH 400: sends an appropriate status and error message when invalid request body format given", () => {
+    const updatedVotes = {
+      inc_votes: "ten",
+    };
+    
+    return request(app)
+    .patch("/api/comments/1")
+    .send(updatedVotes)
+    .expect(400)
+    .then((response) => {
+      expect(response.body.msg).toBe("Bad Request");
+      expect(response.status).toBe(400);
+    });
+  });
+  test("PATCH 404: sends an appropriate status and error message when non-existent comment", () => {
+    const updatedVotes = {
+      inc_votes: 10,
+    };
+    
+    return request(app)
+    .patch("/api/comments/99")
+    .send(updatedVotes)
+    .expect(404)
+    .then((response) => {
+      expect(response.body.msg).toBe("Not Found");
+      expect(response.status).toBe(404);
+    });
+  });
+  test("PATCH 400: sends an appropriate status and error message when missing request body", () => {
+    const updatedVotes = null || undefined;
+    return request(app)
+    .patch("/api/comments/1")
+    .send(updatedVotes)
+    .expect(400)
+    .then((response) => {
+      expect(response.body.msg).toBe("Bad Request");
+      expect(response.status).toBe(400);
+    });
+  });
+});
 });
