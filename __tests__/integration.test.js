@@ -539,3 +539,30 @@ describe("PATCH /api/articles/:article_id", () => {
     });
   });
 });
+
+describe('GET /api/users/:username', () => {
+  test('GET 200: should return user specified ', () => {
+    return request(app)
+    .get('/api/users/lurker')
+    .expect(200)
+    .then((response) => {
+      expect(response.body.user).toMatchObject({
+        username: 'lurker',
+        avatar_url:'https://www.golenbock.com/wp-content/uploads/2015/01/placeholder-user.png',
+        name: 'do_nothing', 
+      })
+    })
+  });
+  describe('GET /api/users/:username Error Handling', () => {
+    test('GET 404: sends an appropriate status and error message when non-existent username', () => {
+      return request(app)
+      .get('/api/users/patsy123')
+      .expect(404)
+      .then((response) => {
+        expect(response.body.msg).toBe('Not Found');
+        expect(response.status).toBe(404);
+      })
+    });
+  });
+
+});
