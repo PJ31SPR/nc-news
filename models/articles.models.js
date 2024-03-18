@@ -33,9 +33,9 @@ exports.selectAllArticles = (topic, sort_by = 'created_at', order_by = 'desc') =
   let orderByStr = '';
 
   if (sort_by) {
-    orderByStr = `ORDER BY articles.${sort_by} ${order_by}`;
+    orderByStr = `ORDER BY ${sort_by} ${order_by}`;
   } else {
-    orderByStr = `ORDER BY articles.created_at ${order_by}`;
+    orderByStr = `ORDER BY created_at ${order_by}`;
   }
 
   const topicCheckStr = `SELECT * FROM topics WHERE slug = $1`;
@@ -95,7 +95,7 @@ exports.selectComments = (id) => {
   })
   }
   
-  exports.insertComment = (id, {username, body}) => {
+exports.insertComment = (id, {username, body}) => {
   if (!id || !username || !body){
       return Promise.reject({status: 400, msg: 'Bad Request'})
   };
@@ -106,3 +106,24 @@ exports.selectComments = (id) => {
       return response.rows[0]
   })
   }
+
+//   exports.insertArticle = ({ author, title, body, topic, article_img_url } ) => {
+//     console.log('hello from model')
+//     if (!author || !title || !body || !topic || !article_img_url){
+//       return Promise.reject({status: 400, msg: 'Bad Request'})
+//   };
+//     return db.query(`INSERT INTO articles (author, title, body, topic, article_img_url)
+//     VALUES ($1, $2, $3, $4, $5)
+//     RETURNING *`, 
+//     [author, title, body, topic, article_img_url]).then((response) => {
+//      const newArticle = response.rows[0]
+//      return db.query('SELECT COUNT(*) FROM comments WHERE article_id = $1', [newArticle.article_id]);
+//     }).then((commentCountResult) => {
+//       const commentCount = commentCountResult.rows[0].count;
+//       // Add comment_count property to the new article
+//       console.log(c)
+//       newArticle.comment_count = commentCount;
+//       // Return the new article with all properties
+//       return newArticle;
+//   });
+// }
